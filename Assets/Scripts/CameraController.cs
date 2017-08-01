@@ -31,8 +31,11 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        bool updateCameraTransform = false;
+        if (whiteBallRB.velocity.sqrMagnitude >= 0.5f || whiteBallRB.angularVelocity.sqrMagnitude >= 0.5f) {
+            return; // no updates when the ball is moving
+        }
 
+        bool updateCameraTransform = false;
         float wheelScroll = Input.GetAxis("Mouse ScrollWheel");
         if (wheelScroll != 0) {
             cameraZoom += wheelScroll * 0.5f;
@@ -49,29 +52,32 @@ public class CameraController : MonoBehaviour {
             updateCameraTransform = true;
         }
 
-        if (updateCameraTransform) {
-            UpdateCameraTransformation();
-        }
-
         if (Input.GetMouseButtonUp(0)) {
             // hit the ball!
             if (null != whiteBallRB) {
-                Debug.Log("adding force");
-                whiteBallRB.AddForce(GetCameraToBallVector() * 10, ForceMode.VelocityChange);
+                whiteBallRB.AddForce(GetCameraToBallVector() * 5, ForceMode.VelocityChange);
             }
         }
+        
+        // move the camera over to the new ball position
+        Vector3 ballPos = whiteBall.transform.position;
+        ballPos.y = 0;
+        Vector3 vecDir = ballPos - cameraLookAt;
+        if (vecDir.sqrMagnitude > 0) {
+            updateCameraTransform = true;
+            cameraLookAt = cameraLookAt + (vecDir * 0.08f);
+        }
 
-        Debug.Log("whiteBallRB.velocity" + whiteBallRB.velocity.ToString() + " angularVelo:" + whiteBallRB.angularVelocity.ToString());
-	}
+        if (updateCameraTransform) {
+            UpdateCameraTransformation();
+        }
+    }
 
     private void UpdateCameraTransformation()
     {
-        Vector3 viewDir = new Vector3(1, 0, 0);
-        Quaternion rotate = Quaternion.Euler(0, cameraAngle, 30);
-        viewDir = rotate * viewDir;
-        Debug.Log("cameraAngle:" + cameraAngle); 
-        //Debug.Log("cameraZoom:" + cameraZoom + " viewDir:" + viewDir.ToString());
-        transform.position = cameraLookAt + viewDir * cameraZoom;
+        Vector3 zoomVector = new Vector3(1, 0, 0);
+        zoomVector = Quaternion.Euler(0, cameraAngle, 30) * zoomVector;
+        transform.position = cameraLookAt + zoomVector * cameraZoom;
         transform.LookAt(cameraLookAt);
     }
 
