@@ -253,7 +253,7 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 169568602}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 9ad5283c4c897bc42b3bab5ae85a1abc, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 313811633}
   - component: {fileID: 313811637}
   m_Layer: 0
-  m_Name: Ball
+  m_Name: WhiteBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -336,7 +336,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 313811632}
-  m_Material: {fileID: 13400000, guid: 3ed29c589f48fd74b94332294f360146, type: 2}
+  m_Material: {fileID: 13400000, guid: 9ad5283c4c897bc42b3bab5ae85a1abc, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -370,13 +370,13 @@ Rigidbody:
   m_GameObject: {fileID: 313811632}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 0.1
+  m_AngularDrag: 0.1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1001 &378190007
 Prefab:
   m_ObjectHideFlags: 0
@@ -483,7 +483,7 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 492487352}
-  m_Material: {fileID: 13400000, guid: 3ed29c589f48fd74b94332294f360146, type: 2}
+  m_Material: {fileID: 13400000, guid: 9ad5283c4c897bc42b3bab5ae85a1abc, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -668,7 +668,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 700302833}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.13, y: 0, z: 0}
+  m_LocalPosition: {x: 1.533, y: 0.011, z: -0.044}
   m_LocalScale: {x: 0.02, y: 0.7, z: 0.02}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1075,7 +1075,7 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1676039642}
-  m_Material: {fileID: 13400000, guid: 3ed29c589f48fd74b94332294f360146, type: 2}
+  m_Material: {fileID: 13400000, guid: 9ad5283c4c897bc42b3bab5ae85a1abc, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1157,7 +1157,7 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1822637138}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 9ad5283c4c897bc42b3bab5ae85a1abc, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2

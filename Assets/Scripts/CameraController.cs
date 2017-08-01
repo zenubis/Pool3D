@@ -56,11 +56,12 @@ public class CameraController : MonoBehaviour {
         if (Input.GetMouseButtonUp(0)) {
             // hit the ball!
             if (null != whiteBallRB) {
-                whiteBallRB.AddForce(GetCameraToBallVector() * 200);
+                Debug.Log("adding force");
+                whiteBallRB.AddForce(GetCameraToBallVector() * 10, ForceMode.VelocityChange);
             }
         }
 
-        Debug.Log("whiteBallRB.velocity" + whiteBallRB.velocity.ToString());
+        Debug.Log("whiteBallRB.velocity" + whiteBallRB.velocity.ToString() + " angularVelo:" + whiteBallRB.angularVelocity.ToString());
 	}
 
     private void UpdateCameraTransformation()
