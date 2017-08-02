@@ -7,6 +7,9 @@ public class CameraController : MonoBehaviour {
     public float minZoom = 0.8f;
     public float maxZoom = 3;
 
+    private GameManager gm;
+
+    // white ball
     private GameObject whiteBall;
     private Rigidbody whiteBallRB;
 
@@ -18,10 +21,11 @@ public class CameraController : MonoBehaviour {
     private float cameraZoom = 1.0f;
     private float cameraAngle = 0; // on the xz plane
     private Vector3 cameraLookAt = new Vector3(0, 0, 0);
-	
-	void Start ()
+
+    void Start ()
     {
-        whiteBall = GameObject.Find("WhiteBall");
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        whiteBall = gm.whiteBall;
         if (null != whiteBall) {
             whiteBallRB = whiteBall.GetComponent<Rigidbody>();
         }
@@ -71,7 +75,7 @@ public class CameraController : MonoBehaviour {
             if (!EventSystem.current.IsPointerOverGameObject()) {
                 // hit the ball!
                 if (null != whiteBallRB) {
-                    whiteBallRB.AddForce(GetCueVector() * 5, ForceMode.VelocityChange);
+                    whiteBallRB.AddForce(GetCueVector() * 6, ForceMode.VelocityChange);
                     cueStickRenderer.enabled = false;
                 }
             }
