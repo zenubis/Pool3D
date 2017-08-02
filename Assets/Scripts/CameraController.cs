@@ -9,10 +9,6 @@ public class CameraController : MonoBehaviour {
 
     private GameManager gm;
 
-    // white ball
-    private GameObject whiteBall;
-    private Rigidbody whiteBallRB;
-
     // cue stick
     private GameObject cueStick;
     private MeshRenderer cueStickRenderer;
@@ -25,18 +21,14 @@ public class CameraController : MonoBehaviour {
     void Start ()
     {
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-        whiteBall = gm.whiteBall;
-        if (null != whiteBall) {
-            whiteBallRB = whiteBall.GetComponent<Rigidbody>();
-        }
-
+        
         cueStick = GameObject.Find("Cue");
         if (null != cueStick) {
             cueStickRenderer = cueStick.GetComponent<MeshRenderer>();
             cueStickRenderer.enabled = false;
         }
 
-        cameraLookAt = whiteBall.transform.position;
+        cameraLookAt = gm.whiteBall.transform.position;
         cameraLookAt.y = 0;
 
         // update camera rotation
@@ -46,7 +38,7 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (whiteBallRB.velocity.sqrMagnitude >= 0.5f || whiteBallRB.angularVelocity.sqrMagnitude >= 0.5f) {
+        if (gm.whiteBallRB.velocity.sqrMagnitude >= 0.5f || gm.whiteBallRB.angularVelocity.sqrMagnitude >= 0.5f) {
             cueStickRenderer.enabled = false;
             return; // no updates when the ball is moving
         }
@@ -74,15 +66,15 @@ public class CameraController : MonoBehaviour {
             // Check if the mouse was clicked over a UI element
             if (!EventSystem.current.IsPointerOverGameObject()) {
                 // hit the ball!
-                if (null != whiteBallRB) {
-                    whiteBallRB.AddForce(GetCueVector() * 6, ForceMode.VelocityChange);
+                if (null != gm.whiteBallRB) {
+                    gm.whiteBallRB.AddForce(GetCueVector() * 6, ForceMode.VelocityChange);
                     cueStickRenderer.enabled = false;
                 }
             }
         }
         
         // move the camera over to the new ball position
-        Vector3 ballPos = whiteBall.transform.position;
+        Vector3 ballPos = gm.whiteBall.transform.position;
         ballPos.y = 0;
         Vector3 vecDir = ballPos - cameraLookAt;
         if (vecDir.sqrMagnitude > 0) {
@@ -97,6 +89,7 @@ public class CameraController : MonoBehaviour {
 
     private void UpdateCameraTransformation()
     {
+        // to update camera's transformation from variables
         Vector3 zoomVector = new Vector3(1, 0, 0);
         zoomVector = Quaternion.Euler(0, cameraAngle, 30) * zoomVector;
         transform.position = cameraLookAt + zoomVector * cameraZoom;
@@ -105,10 +98,11 @@ public class CameraController : MonoBehaviour {
 
     private void UpdateCueStickTransformation()
     {
+        // to update cue stick so that it will point to white ball
         cueStickRenderer.enabled = true;
 
         cueStick.transform.rotation = Quaternion.Euler(0, cameraAngle, 100);
-        cueStick.transform.position = whiteBall.transform.position + Quaternion.Euler(0, cameraAngle, 0) * (new Vector3(0.751f, 0.139f, 0));
+        cueStick.transform.position = gm.whiteBall.transform.position + Quaternion.Euler(0, cameraAngle, 0) * (new Vector3(0.751f, 0.139f, 0));
     }
 
     private Vector3 GetCueVector()

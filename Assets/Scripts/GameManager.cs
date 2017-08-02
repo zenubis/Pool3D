@@ -9,13 +9,15 @@ public class GameManager : MonoBehaviour {
     public GameObject redBallPrefab;
 
     public GameObject whiteBall;
-    Rigidbody whiteBallRB;
-    
+    public Rigidbody whiteBallRB;
 
     private int score;
     
     private Text txtScore;
     private List<GameObject> redBallList;
+
+    // constants
+    private const int MAX_RED_BALL = 10;
 
     // Use this for initialization
     void Start ()
@@ -26,8 +28,8 @@ public class GameManager : MonoBehaviour {
         whiteBallRB = whiteBall.GetComponent<Rigidbody>();
         whiteBall.tag = "WhiteBall";
 
-        redBallList = new List<GameObject>(10);
-        for (int i = 0; 10 > i; ++i) {
+        redBallList = new List<GameObject>(MAX_RED_BALL);
+        for (int i = 0; MAX_RED_BALL > i; ++i) {
             GameObject rb = Instantiate(redBallPrefab);
             rb.SetActive(true);
             rb.tag = "RedBall";
@@ -38,12 +40,10 @@ public class GameManager : MonoBehaviour {
 
     public void ResetTable()
     {
+        // layout the white and red balls nicely on the table
         score = 0;
-        UpdateScore();
-        whiteBall.SetActive(true);
-        whiteBall.transform.position = new Vector3(0.75f, 0.04f, 0);
-        whiteBallRB.velocity = new Vector3(0, 0, 0);
-        whiteBallRB.angularVelocity = new Vector3(0, 0, 0);
+        UpdateScoreLabel();
+        ResetWhiteBallPosition();
 
         redBallList[0].transform.position = new Vector3(-0.45f - (0 * 0.08f), 0.04f, 0);
 
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour {
         redBallList[7].transform.position = new Vector3(-0.45f - (3 * 0.08f), 0.04f, -0.12f + (1 * 0.08f));
         redBallList[8].transform.position = new Vector3(-0.45f - (3 * 0.08f), 0.04f, -0.12f + (2 * 0.08f));
         redBallList[9].transform.position = new Vector3(-0.45f - (3 * 0.08f), 0.04f, -0.12f + (3 * 0.08f));
-        for (int i = 0; 10 > i; ++i) {
+        for (int i = 0; MAX_RED_BALL > i; ++i) {
             redBallList[i].SetActive(true);
             Rigidbody rb = redBallList[i].GetComponent<Rigidbody>();
             rb.velocity = new Vector3(0, 0, 0);
@@ -74,10 +74,7 @@ public class GameManager : MonoBehaviour {
 
         if (ball.tag.Equals("WhiteBall")) {
             score--;
-            // reset white ball back to original place
-            whiteBall.transform.position = new Vector3(0.75f, 0.04f, 0);
-            whiteBallRB.velocity = new Vector3(0, 0, 0);
-            whiteBallRB.angularVelocity = new Vector3(0, 0, 0);
+            ResetWhiteBallPosition();
         }
         else if (ball.tag.Equals("RedBall")) {
             score++;
@@ -87,12 +84,35 @@ public class GameManager : MonoBehaviour {
             Debug.Log("Unknown ball or gameobject:" + ball.name + " tag:" + ball.tag);
             ball.SetActive(false);
         }
-        
-        UpdateScore();
+
+        UpdateScoreLabel();
+
+        // check if we need to reset the table
+        bool noMoreRedBall = true;
+        for (int i = 0; MAX_RED_BALL > i; ++i) {
+            if (redBallList[i].activeInHierarchy) {
+                noMoreRedBall = false;
+                break;
+            }
+        }
+
+        if (noMoreRedBall) {
+            ResetTable();
+        }
     }
 
-    void UpdateScore()
+    void UpdateScoreLabel()
     {
-        txtScore.text = "Score: " + score;
+        if (txtScore) {
+            txtScore.text = "Score: " + score;
+        }
+    }
+
+    void ResetWhiteBallPosition()
+    {
+        // reset white ball back to original place
+        whiteBall.transform.position = new Vector3(0.75f, 0.04f, 0);
+        whiteBallRB.velocity = new Vector3(0, 0, 0);
+        whiteBallRB.angularVelocity = new Vector3(0, 0, 0);
     }
 }
