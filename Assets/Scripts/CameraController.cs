@@ -48,7 +48,7 @@ public class CameraController : MonoBehaviour {
         bool updateCameraTransform = false;
         float wheelScroll = Input.GetAxis("Mouse ScrollWheel");
         if (wheelScroll != 0) {
-            cameraZoom += wheelScroll * 0.5f;
+            cameraZoom -= wheelScroll * 0.5f;
             cameraZoom = Mathf.Clamp(cameraZoom, minZoom, maxZoom);
             updateCameraTransform = true;
         }
