@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour {
     public float minZoom = 0.8f;
@@ -8,6 +9,10 @@ public class CameraController : MonoBehaviour {
 
     private GameObject whiteBall;
     private Rigidbody whiteBallRB;
+
+    // cue stick
+    private GameObject cueStick;
+    private MeshRenderer cueStickRenderer;
 
     // camera will be controlled using these variables
     private float cameraZoom = 1.0f;
@@ -21,6 +26,12 @@ public class CameraController : MonoBehaviour {
             whiteBallRB = whiteBall.GetComponent<Rigidbody>();
         }
 
+        cueStick = GameObject.Find("Cue");
+        if (null != cueStick) {
+            cueStickRenderer = cueStick.GetComponent<MeshRenderer>();
+            cueStickRenderer.enabled = false;
+        }
+
         cameraLookAt = whiteBall.transform.position;
         cameraLookAt.y = 0;
 
@@ -32,8 +43,11 @@ public class CameraController : MonoBehaviour {
 	void Update ()
     {
         if (whiteBallRB.velocity.sqrMagnitude >= 0.5f || whiteBallRB.angularVelocity.sqrMagnitude >= 0.5f) {
+            cueStickRenderer.enabled = false;
             return; // no updates when the ball is moving
         }
+
+        UpdateCueStickTransformation();
 
         bool updateCameraTransform = false;
         float wheelScroll = Input.GetAxis("Mouse ScrollWheel");
@@ -53,9 +67,13 @@ public class CameraController : MonoBehaviour {
         }
 
         if (Input.GetMouseButtonUp(0)) {
-            // hit the ball!
-            if (null != whiteBallRB) {
-                whiteBallRB.AddForce(GetCameraToBallVector() * 5, ForceMode.VelocityChange);
+            // Check if the mouse was clicked over a UI element
+            if (!EventSystem.current.IsPointerOverGameObject()) {
+                // hit the ball!
+                if (null != whiteBallRB) {
+                    whiteBallRB.AddForce(GetCueVector() * 5, ForceMode.VelocityChange);
+                    cueStickRenderer.enabled = false;
+                }
             }
         }
         
@@ -81,12 +99,17 @@ public class CameraController : MonoBehaviour {
         transform.LookAt(cameraLookAt);
     }
 
-    private Vector3 GetCameraToBallVector()
+    private void UpdateCueStickTransformation()
     {
-        Vector3 dir = whiteBall.transform.position - transform.position;
-        dir.y = 0;
-        dir.Normalize();
-        return dir;
+        cueStickRenderer.enabled = true;
+
+        cueStick.transform.rotation = Quaternion.Euler(0, cameraAngle, 100);
+        cueStick.transform.position = whiteBall.transform.position + Quaternion.Euler(0, cameraAngle, 0) * (new Vector3(0.751f, 0.139f, 0));
+    }
+
+    private Vector3 GetCueVector()
+    {
+        return Quaternion.Euler(0, cameraAngle, 0) * (new Vector3(-1, 0, 0));        
     }
     
 }
