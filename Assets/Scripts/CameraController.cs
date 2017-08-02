@@ -40,6 +40,8 @@ public class CameraController : MonoBehaviour {
     {
         if (gm.whiteBallRB.velocity.sqrMagnitude >= 0.5f || gm.whiteBallRB.angularVelocity.sqrMagnitude >= 0.5f) {
             cueStickRenderer.enabled = false;
+            // TODO: maybe we can move the camera towards the center and zoom out during this time,
+            // so that we can get a better view of the table
             return; // no updates when the ball is moving
         }
 
@@ -65,7 +67,7 @@ public class CameraController : MonoBehaviour {
         if (Input.GetMouseButtonUp(0)) {
             // Check if the mouse was clicked over a UI element
             if (!EventSystem.current.IsPointerOverGameObject()) {
-                // hit the ball!
+                // hit the ball! 
                 if (null != gm.whiteBallRB) {
                     gm.whiteBallRB.AddForce(GetCueVector() * 6, ForceMode.VelocityChange);
                     cueStickRenderer.enabled = false;

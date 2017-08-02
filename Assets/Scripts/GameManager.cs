@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour {
         redBallList[7].transform.position = new Vector3(-0.45f - (3 * 0.08f), 0.04f, -0.12f + (1 * 0.08f));
         redBallList[8].transform.position = new Vector3(-0.45f - (3 * 0.08f), 0.04f, -0.12f + (2 * 0.08f));
         redBallList[9].transform.position = new Vector3(-0.45f - (3 * 0.08f), 0.04f, -0.12f + (3 * 0.08f));
+
         for (int i = 0; MAX_RED_BALL > i; ++i) {
             redBallList[i].SetActive(true);
             Rigidbody rb = redBallList[i].GetComponent<Rigidbody>();
